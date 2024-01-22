@@ -1,18 +1,20 @@
 import React from "react";
-import signupImage from "../Assets/signup.svg";
+import RegisterImage from "../Assets/register.svg";
+import {Link} from "react-router-dom"
 
-const SignUp = () => {
+const Register = () => {
   return (
     <div className="w-screen h-screen flex justify-center items-center">
       <div className=" w-10/12 grid grid-cols-1 md:grid-cols-2">
         <div className="w-full hidden md:flex">
-
-        <img src={signupImage} className="w-full" alt="Phone image" />
+          <img src={RegisterImage} className="w-full" alt="Phone image" />
         </div>
 
         <div className="w-full flex  items-center ">
-          <div className="w-full sm:w-10/12 md:w-5/12 lg:w-7/12 mx-auto h-fit flex 
-          flex-col">
+          <div
+            className="w-full sm:w-10/12 md:w-5/12 lg:w-7/12 mx-auto h-fit flex 
+          flex-col"
+          >
             <h1></h1>
             <form action="" className=" flex flex-col gap-5 *:w-full ">
               <input
@@ -31,7 +33,7 @@ const SignUp = () => {
                 className="input input-primary"
               />
               <button type="submit" className="btn btn-primary">
-                Sign Up
+                Register
               </button>
             </form>
             <div className="divider divider-primary my-6">Or</div>
@@ -100,13 +102,14 @@ const SignUp = () => {
               </svg>
               <span>Continue with Google</span>
             </button>
-            <p className="mt-4 text-sm text-center">Already have Account ? <a href="">Log in</a></p>
+            <p className="mt-4 text-sm text-center">
+              Already have Account ? <Link to="/login" className="text-primary underline">Login</Link>
+            </p>
           </div>
-          {/* Add another image if needed */}
         </div>
       </div>
     </div>
   );
 };
 
-export default SignUp;
+export default Register;
