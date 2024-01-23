@@ -8,7 +8,7 @@ const LogIn = () => {
   const [email, setEmail] = useState("");
   const [emailValidate, setEmailValidate] = useState(true);
   const [password, setPassword] = useState("");
-  const { signIn, setUser } = useUserAuth();
+  const { signIn, setUser, googleSignIn } = useUserAuth();
   const navigate = useNavigate();
 
   const handleEmailInput = (e) => {
@@ -27,14 +27,21 @@ const LogIn = () => {
       try {
         const response = await signIn(email, password);
         setUser(response.user);
-        console.log(response.user);
         navigate("/");
       } catch (error) {
         console.log(error.message);
       }
     }
   };
-
+ const googleSignInHandler = async () => {
+   try {
+     const response = await googleSignIn();
+     setUser(response.user);
+     navigate("/");
+   } catch (error) {
+     console.log(error.message);
+   }
+ };
   return (
     <div className="w-screen h-svh md:h-full flex justify-center items-center">
       <div className="w-10/12 grid grid-cols-1 md:grid-cols-2">
@@ -73,7 +80,7 @@ const LogIn = () => {
               </button>
             </form>
             <div className="divider divider-primary my-6">Or</div>
-            <button className="btn rounded-xl w-fit mx-auto  items-center ">
+            <button className="btn rounded-xl w-fit mx-auto  items-center " onClick={googleSignInHandler}>
               <svg
                 className="h-6 w-6 mr-2"
                 xmlns="http://www.w3.org/2000/svg"

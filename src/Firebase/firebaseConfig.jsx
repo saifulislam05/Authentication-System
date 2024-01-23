@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 const firebaseConfig = {
   apiKey: "AIzaSyD0bhUCigWGEMVrjr5YtAHvSIiw7c1eP0A",
   authDomain: "geekster-auth.firebaseapp.com",
@@ -12,5 +12,5 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-
+export const provider = new GoogleAuthProvider();
 export default app;
