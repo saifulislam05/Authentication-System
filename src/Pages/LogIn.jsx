@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import LogInImage from "../Assets/Login.svg";
+import LogInImage from "../Assets/signInImage.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserAuth } from "../Context/UserAuthContext";
 import validator from "validator";
