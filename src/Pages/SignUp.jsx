@@ -48,8 +48,8 @@ const SignUp = () => {
   const googleSignInHandler = async () => {
     try {
       const response = await googleSignIn();
-     setUser(response.user);
-     navigate("/");
+      setUser(response.user);
+      navigate("/");
     } catch (error) {
       console.log(error.message);
     }
