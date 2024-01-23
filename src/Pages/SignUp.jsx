@@ -1,13 +1,55 @@
-import React from "react";
-import RegisterImage from "../Assets/register.svg";
-import {Link} from "react-router-dom"
+import React, { useEffect, useState } from "react";
+import signUpImage from "../Assets/signUp.svg";
+import { Link, useNavigate } from "react-router-dom";
 
-const Register = () => {
+import { useUserAuth } from "../Context/UserAuthContext";
+import validator from "validator";
+
+const SignUp = () => {
+  const [email, setEmail] = useState("");
+  const [emailValidate, setEmailValidate] = useState(true);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordMatched, setPasswordMatched] = useState(false);
+  const { signUp, setUser } = useUserAuth();
+  const navigate = useNavigate();
+
+  const handleEmailInput = (e) => {
+    let new_Email = e.target.value;
+    setEmail(new_Email);
+    if (!validator.isEmail(new_Email)) {
+      setEmailValidate(false);
+    } else {
+      setEmailValidate(true);
+    }
+  };
+
+  useEffect(() => {
+    if (password === confirmPassword) {
+      setPasswordMatched(true);
+    } else {
+      setPasswordMatched(false);
+    }
+  }, [password, confirmPassword]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (email && emailValidate && password && passwordMatched) {
+      try {
+        const response = await signUp(email, password);
+        setUser(response.user);
+        navigate("/");
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+  };
+
   return (
-    <div className="w-screen h-screen flex justify-center items-center">
+    <div className="w-screen h-svh md:h-full flex justify-center items-center ">
       <div className=" w-10/12 grid grid-cols-1 md:grid-cols-2">
         <div className="w-full hidden md:flex">
-          <img src={RegisterImage} className="w-full" alt="Phone image" />
+          <img src={signUpImage} className="w-full" alt="Phone image" />
         </div>
 
         <div className="w-full flex  items-center ">
@@ -16,32 +58,40 @@ const Register = () => {
           flex-col"
           >
             <h1></h1>
-            <form action="" className=" flex flex-col gap-5 *:w-full ">
+            <div className=" flex flex-col gap-5 *:w-full ">
               <input
                 type="email"
                 placeholder="Email"
-                className="input input-primary"
+                className={`input input-primary ${
+                  !emailValidate ? "input-error" : ""
+                }`}
+                value={email}
+                onChange={handleEmailInput}
               />
               <input
                 type="password"
                 placeholder="Password"
                 className="input input-primary"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <input
                 type="password"
                 placeholder="Confirm Password"
                 className="input input-primary"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
               />
-              <button type="submit" className="btn btn-primary">
-                Register
+              <button className="btn btn-primary" onClick={handleSubmit}>
+                Sign Up
               </button>
-            </form>
+            </div>
             <div className="divider divider-primary my-6">Or</div>
-            <button class="btn rounded-xl w-fit mx-auto  items-center ">
+            <button className="btn rounded-xl w-fit mx-auto  items-center ">
               <svg
-                class="h-6 w-6 mr-2"
+                className="h-6 w-6 mr-2"
                 xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlnsXlink="http://www.w3.org/1999/xlink"
                 width="800px"
                 height="800px"
                 viewBox="-0.5 0 48 48"
@@ -53,9 +103,9 @@ const Register = () => {
                 <g
                   id="Icons"
                   stroke="none"
-                  stroke-width="1"
+                  strokeWidth="1"
                   fill="none"
-                  fill-rule="evenodd"
+                  fillRule="evenodd"
                 >
                   {" "}
                   <g
@@ -103,7 +153,10 @@ const Register = () => {
               <span>Continue with Google</span>
             </button>
             <p className="mt-4 text-sm text-center">
-              Already have Account ? <Link to="/login" className="text-primary underline">Login</Link>
+              Already have Account ?{" "}
+              <Link to="/login" className="text-primary underline">
+                Login
+              </Link>
             </p>
           </div>
         </div>
@@ -112,4 +165,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default SignUp;

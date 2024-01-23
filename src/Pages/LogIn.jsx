@@ -1,31 +1,70 @@
-import React from "react";
+import React, { useState } from "react";
 import LogInImage from "../Assets/Login.svg";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import { useUserAuth } from "../Context/UserAuthContext";
+import validator from "validator";
 
 const LogIn = () => {
+  const [email, setEmail] = useState("");
+  const [emailValidate, setEmailValidate] = useState(true);
+  const [password, setPassword] = useState("");
+  const { signIn, setUser } = useUserAuth();
+  const navigate = useNavigate();
+
+  const handleEmailInput = (e) => {
+    let new_Email = e.target.value;
+    setEmail(new_Email);
+    if (!validator.isEmail(new_Email)) {
+      setEmailValidate(false);
+    } else {
+      setEmailValidate(true);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (email && emailValidate && password) {
+      try {
+        const response = await signIn(email, password);
+        setUser(response.user);
+        console.log(response.user);
+        navigate("/");
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+  };
+
   return (
-    <div className="w-screen h-screen flex justify-center items-center">
-      <div className=" w-10/12 grid grid-cols-1 md:grid-cols-2">
+    <div className="w-screen h-svh md:h-full flex justify-center items-center">
+      <div className="w-10/12 grid grid-cols-1 md:grid-cols-2">
         <div className="w-full hidden md:flex">
           <img src={LogInImage} className="w-full" alt="Phone image" />
         </div>
 
-        <div className="w-full flex  items-center ">
+        <div className="w-full flex items-center">
           <div
             className="w-full sm:w-10/12 md:w-5/12 lg:w-7/12 mx-auto h-fit flex 
           flex-col"
           >
-            <h1></h1>
-            <form action="" className=" flex flex-col gap-5 *:w-full ">
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col gap-5 w-full"
+            >
               <input
                 type="email"
                 placeholder="Email"
-                className="input input-primary"
+                className={`input input-primary ${
+                  !emailValidate ? "input-error" : ""
+                }`}
+                value={email}
+                onChange={handleEmailInput}
               />
               <input
                 type="password"
                 placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="input input-primary"
               />
 
@@ -34,11 +73,11 @@ const LogIn = () => {
               </button>
             </form>
             <div className="divider divider-primary my-6">Or</div>
-            <button class="btn rounded-xl w-fit mx-auto  items-center ">
+            <button className="btn rounded-xl w-fit mx-auto  items-center ">
               <svg
-                class="h-6 w-6 mr-2"
+                className="h-6 w-6 mr-2"
                 xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlnsXlink="http://www.w3.org/1999/xlink"
                 width="800px"
                 height="800px"
                 viewBox="-0.5 0 48 48"
@@ -50,9 +89,9 @@ const LogIn = () => {
                 <g
                   id="Icons"
                   stroke="none"
-                  stroke-width="1"
+                  strokeWidth="1"
                   fill="none"
-                  fill-rule="evenodd"
+                  fillRule="evenodd"
                 >
                   {" "}
                   <g
@@ -100,9 +139,9 @@ const LogIn = () => {
               <span>Continue with Google</span>
             </button>
             <p className="mt-4 text-sm text-center">
-              Don't have Account ?{" "}
-              <Link to="/register" className="text-primary underline">
-                Register
+              Don't have an account?{" "}
+              <Link to="/signup" className="text-primary underline">
+                Sign Up
               </Link>{" "}
               now
             </p>
